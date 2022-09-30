@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Calculator</title>
+</head>
+<body>
+  <div class="calculator">
+    <div class="params">
+      <form>
+        <label for="birth">
+          Date of birth: 
+          <input id="birth" type="date" required />
+        </label>
+
+        <label for="state">
+          State: 
+          <select id="state" required>
+            <option value="NewJers">NJ - New Jers</option>
+            <option value="NewYork">NY - New York</option>
+          </select>
+        </label>
+
+        <label for="plan">
+          Plan: 
+          <select id="plan" required>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </label>
+
+        <label for="age">
+          Age: 
+          <input id="age" type="text" readonly>
+        </label>
+
+        <button type="submit">
+          Get Premium
+        </button>
+      </form>
+    </div>
+    <div class="premium">
+      <div class="period">
+        <p>Period: </p>
+        <select id="period" aria-label="a">
+          <option value="1">Monthly</option>
+          <option value="3">Quarterly</option>
+          <option value="6">Semi-Annually</option>
+          <option value="12">Annually</option>
+        </select>
+      </div>
+
+      <div class="premiums">
+        <div class="titles">
+          <p>Carrier</p>
+          <p>Premium</p>
+          <p>Annual</p>
+          <p>Monthly</p>
+        </div>
+
+        <ul class="premium-list">
+          <li>
+            <p>Qwerty</p>
+            <p>12345678.91</p>
+            <p>12345678.91</p>
+            <p>123.45</p>
+          </li>
+
+          <li>
+            <p>Asdf</p>
+            <p>12345678.91</p>
+            <p>12345678.91</p>
+            <p>121.27</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
