@@ -1,14 +1,23 @@
+const calculator = document.querySelector('.calculator');
+// form elements
 const date = document.getElementById('birth');
 const state = document.getElementById('state');
 const plan = document.getElementById('plan');
 const age = document.getElementById('age');
-const button = document.getElementById('button');
+const submitBtn = document.getElementById('submit');
+// extra elements
 const period = document.getElementById('period');
 const premiumList = document.querySelector('.premium-list');
+const updaterBtn = document.getElementById('edit');
+//updater elements
+const updater = document.querySelector('.updater');
+const backBtn = document.getElementById('back');
+const saveBtn = document.getElementById('save');
+const table = document.querySelector('.data');
 
 let premiums = [];
 
-const api = 'http://localhost:3000/api/v1';
+const api = 'http://localhost:3000/api/v1'; // Link to API, in case is deployed elsewhere
 
 // helper functions
 
@@ -27,16 +36,30 @@ function calculateAge(date) {
   return ageValue;
 }
 
-function addState(stateName) {
-  if(stateName !== '0'){
-    let [postal, name] = stateName.split('-');
-    name = name.replace(/([A-Z])/g, ' $1').trim().substring(0, 12);
+function stateNameFormatter(name) {
+  let [postal, newName] = name.split('-');
+  newName = newName.replace(/([A-Z])/g, ' $1').trim().substring(0, 12);
 
-    state.innerHTML += `<option value="${stateName}">${postal} - ${name}</option>`;
+  return `${postal} - ${newName}`;
+}
+
+function MonthNameOrNumber(month) {
+  if(typeof(month) === 'number'){ // Return name if parameter is a number
+    const date = new Date();
+  date.setMonth(month - 1);
+  return date.toLocaleString('en-US', {month: 'long'});
+  } else if(typeof(month) === 'string'){ // Return a number if the parameter is a name
+    return new Date(Date.parse(mon + "1, 2000")).getMonth() + 1;
   }
 }
 
-function addPremium(premium) {
+function addState(stateName) { // Adds the option to the dropdown menu
+  if(stateName !== '0'){
+    state.innerHTML += `<option value="${stateName}">${stateNameFormatter(stateName)}</option>`;
+  }
+}
+
+function addPremium(premium) { // Adds the premium to the result list
   premiumList.innerHTML += `
     <li class="item">
       <p>${premium.carrier}</p>
@@ -52,6 +75,37 @@ function updatePremiumList() {
   premiums.forEach((premium) => {
     addPremium(premium);
   });
+}
+
+function addTableRows(data) {
+
+  table.innerHTML = `
+    <tr>
+      <th>State</th>
+      <th>Plan</th>
+      <th>Month Of Birth</th>
+      <th colspan="2">Age Range</th>
+      <th>Premium</th>
+      <th>Carrier</th>
+    </tr>`;
+
+  for (const [stateName, object] of Object.entries(data)) {
+    for (const [planType, array] of Object.entries(object)) {
+      array.map((premium) => {
+        table.innerHTML += `
+          <tr>
+            <td contenteditable>${stateName !== '0' ? stateNameFormatter(stateName) : 'ANY'}</td>
+            <td contenteditable>${planType}</td>
+            <td contenteditable>${premium[0] !== 0 ? MonthNameOrNumber(premium[0]) : 'ANY'}</td>
+            <td contenteditable>${premium[1]}</td>
+            <td contenteditable>${premium[2]}</td>
+            <td contenteditable>${premium[3]}</td>
+            <td contenteditable>${premium[4]}</td>
+          </tr>
+        `;
+      })
+    }
+  }
 }
 
 // API interactions
@@ -80,29 +134,52 @@ function getPremiums() {
     });
 };
 
+function getFullDatabase() {
+  fetch(api,
+    { method: 'GET',
+      headers: { 'Content-type': 'application/json'},
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        addTableRows(data);
+        backBtn.disabled = false;
+      })
+}
+
 // Event listeners
 
 date.addEventListener('change', () => {
   ageValue = calculateAge(date.value);
 
   if (ageValue < 18){
-    button.disabled = true
+    submitBtn.disabled = true
     age.classList.add('error');
     age.value = 'You need to be older than 18';
   }  else {
-    state.value ? button.disabled = false : button.disabled = true
+    state.value ? submitBtn.disabled = false : submitBtn.disabled = true
     age.classList.remove('error');
     age.value = ageValue;
   }
 });
 
-button.addEventListener('click', (e) => {
+submitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   getPremiums();
 });
 
 period.addEventListener('change', () => {
   updatePremiumList();
+});
+
+updaterBtn.addEventListener('click', () => {
+  getFullDatabase();
+  calculator.classList.add('hidden');
+  updater.classList.remove('hidden');
+});
+
+backBtn.addEventListener('click', () => {
+  calculator.classList.remove('hidden');
+  updater.classList.add('hidden');
 });
 
 document.addEventListener('DOMContentLoaded', () => {

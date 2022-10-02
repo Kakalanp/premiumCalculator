@@ -11,8 +11,8 @@
 </head>
 <body>
   <div class="calculator">
-    <div class="params">
-      <form>
+    <div class="actions">
+      <form class="params">
         <label for="birth">
           Date of birth: 
           <input id="birth" type="date" required />
@@ -38,10 +38,11 @@
           <input id="age" type="text" readonly>
         </label>
 
-        <button type="submit" id="button" disabled>
+        <button type="submit" id="submit" disabled>
           Get Premium
         </button>
       </form>
+      <button id="edit" type="button">Edit database &gt;</button>
     </div>
     <div class="premium">
       <div class="period">
@@ -66,6 +67,25 @@
         </ul>
       </div>
     </div>
+  </div>
+
+  <div class="updater hidden">
+    <div class="updater-actions">
+      <button id="back" type="button" disabled> &lt; Back to calculator</button>
+      <button id="save" type="button"> Save </button>
+    </div>
+
+    <table class="data">
+      <tr>
+        <td contenteditable>NY - New York</td>
+        <td contenteditable>A</td>
+        <td contenteditable>September</td>
+        <td contenteditable>21</td>
+        <td contenteditable>45</td>
+        <td contenteditable>Qwerty</td>
+        <td contenteditable>150</td>
+      </tr>
+    </table>
   </div>
 
   <script src="index.js"></script>
