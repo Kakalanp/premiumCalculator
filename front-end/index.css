@@ -16,6 +16,8 @@ ul {
 }
 
 .premium {
+  max-height: 50vh;
+  overflow: hidden;
   display: flex;
   border: solid black 2px;
   border-radius: 4px;
@@ -30,7 +32,14 @@ ul {
   width: 80%;
 }
 
+.premium-list {
+  height: 80%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .item {
+  height: 10vh;
   display: flex;
   justify-content: space-around;
   text-align: center;

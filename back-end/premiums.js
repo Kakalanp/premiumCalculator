@@ -36,6 +36,10 @@ app.get("/", (req, res) => {
   res.send("go to /api/v1/states to see the list of states available");
 });
 
+app.get("/api/v1", (req, res) => {
+  res.send(data);
+});
+
 app.get("/api/v1/states", (req, res) => {
   res.send(Object.keys(data));
 });
@@ -47,7 +51,7 @@ app.get("/api/v1/states/:state&:plan&:date&:age", (req, res) => {
     .concat(data["0"][`${req.params.plan}`])
     .map((option) => {
       if(parseInt(req.params.age) === ageCalculator(req.params.date)) {
-        const month = parseInt((req.params.date).substring(5,2));
+        const month = parseInt((req.params.date).substring(5,7));
 
         if (option[0] === month || option[0] === 0) {
           (parseInt(req.params.age) >= option[1] && parseInt(req.params.age) <= option[2]) &&
