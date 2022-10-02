@@ -29,8 +29,8 @@ function calculateAge(date) {
 
 function addState(stateName) {
   if(stateName !== '0'){
-    const [postal, name] = stateName.split('-');
-    name.replace(/([A-Z])/g, ' $1').trim().substring(0, 12);
+    let [postal, name] = stateName.split('-');
+    name = name.replace(/([A-Z])/g, ' $1').trim().substring(0, 12);
 
     state.innerHTML += `<option value="${stateName}">${postal} - ${name}</option>`;
   }
@@ -90,7 +90,7 @@ date.addEventListener('change', () => {
     age.classList.add('error');
     age.value = 'You need to be older than 18';
   }  else {
-    button.disabled = false
+    state.value ? button.disabled = false : button.disabled = true
     age.classList.remove('error');
     age.value = ageValue;
   }
