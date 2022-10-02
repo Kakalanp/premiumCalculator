@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  padding: 0 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100vh;
+}
+
+.premium {
+  display: flex;
+  border: solid black 2px;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.period {
+  width: 20%;
+}
+
+.premiums {
+  width: 80%;
+}
+
+.item {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.item > * {
+  width: 20%;
+  overflow-y: hidden;
+}
+
+.error {
+  border: 2px solid red !important;
+  border-radius: 3px;
+  position: relative;
+  animation: shake 0.1s linear;
+  animation-iteration-count: 3;
+}

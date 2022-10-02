@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="index.css">
+
     <title>Premium Calculator</title>
 </head>
 <body>
@@ -18,8 +21,6 @@
         <label for="state">
           State: 
           <select id="state" required>
-            <option value="NewJers">NJ - New Jers</option>
-            <option value="NewYork">NY - New York</option>
           </select>
         </label>
 
@@ -37,7 +38,7 @@
           <input id="age" type="text" readonly>
         </label>
 
-        <button type="submit">
+        <button type="submit" id="button" disabled>
           Get Premium
         </button>
       </form>
@@ -45,16 +46,16 @@
     <div class="premium">
       <div class="period">
         <p>Period: </p>
-        <select id="period" aria-label="a">
-          <option value="1">Monthly</option>
-          <option value="3">Quarterly</option>
-          <option value="6">Semi-Annually</option>
-          <option value="12">Annually</option>
+        <select id="period" aria-label="period" disabled>
+          <option value="12">Monthly</option>
+          <option value="4">Quarterly</option>
+          <option value="2">Semi-Annually</option>
+          <option value="1">Annually</option>
         </select>
       </div>
 
       <div class="premiums">
-        <div class="titles">
+        <div class="item">
           <p>Carrier</p>
           <p>Premium</p>
           <p>Annual</p>
@@ -62,22 +63,12 @@
         </div>
 
         <ul class="premium-list">
-          <li>
-            <p>Qwerty</p>
-            <p>12345678.91</p>
-            <p>12345678.91</p>
-            <p>123.45</p>
-          </li>
-
-          <li>
-            <p>Asdf</p>
-            <p>12345678.91</p>
-            <p>12345678.91</p>
-            <p>121.27</p>
-          </li>
         </ul>
       </div>
     </div>
   </div>
+
+  <script src="index.js"></script>
+
 </body>
 </html>
