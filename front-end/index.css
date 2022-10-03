@@ -116,6 +116,11 @@ button {
   max-height: 30px;
 }
 
+.plans {
+  display: flex;
+  justify-content: center;
+}
+
 .data {
   text-align: center;
   width: 100%;
