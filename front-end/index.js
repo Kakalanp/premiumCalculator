@@ -1,4 +1,4 @@
-const calculator = document.querySelector('.calculator');
+const calculator = document.querySelector('.calculator'); //page container
 // form elements
 const date = document.getElementById('birth');
 const state = document.getElementById('state');
@@ -9,13 +9,26 @@ const submitBtn = document.getElementById('submit');
 const period = document.getElementById('period');
 const premiumList = document.querySelector('.premium-list');
 const updaterBtn = document.getElementById('edit');
-//updater elements
-const updater = document.querySelector('.updater');
+// updater elements
+const updater = document.querySelector('.updater'); //page container
 const backBtn = document.getElementById('back');
 const saveBtn = document.getElementById('save');
-const table = document.querySelector('.data');
+const table = document.getElementById('table');
+// new premium form elements
+const newState = document.getElementById('newState');
+const newPlanContainer = document.querySelector('.plans');
+const newAPlan = document.getElementById('newAPlan');
+const newBPlan = document.getElementById('newBPlan');
+const newCPlan = document.getElementById('newCPlan');
+const newMonth = document.getElementById('newMonth');
+const minAge = document.getElementById('minAge');
+const maxAge = document.getElementById('maxAge');
+const newPremium = document.getElementById('newPremium');
+const newCarrier = document.getElementById('newCarrier');
+const newPremiumBtn = document.getElementById('createPremium');
 
 let premiums = [];
+let db = {}; //only used if user goes to edit db page
 
 const api = 'http://localhost:3000/api/v1'; // Link to API, in case is deployed elsewhere
 
@@ -49,17 +62,18 @@ function MonthNameOrNumber(month) {
   date.setMonth(month - 1);
   return date.toLocaleString('en-US', {month: 'long'});
   } else if(typeof(month) === 'string'){ // Return a number if the parameter is a name
-    return new Date(Date.parse(mon + "1, 2000")).getMonth() + 1;
+    return new Date(Date.parse(month + "1, 2000")).getMonth() + 1;
   }
 }
 
 function addState(stateName) { // Adds the option to the dropdown menu
   if(stateName !== '0'){
     state.innerHTML += `<option value="${stateName}">${stateNameFormatter(stateName)}</option>`;
+    newState.innerHTML += `<option value="${stateNameFormatter(stateName)}">`
   }
 }
 
-function addPremium(premium) { // Adds the premium to the result list
+function addPremium(premium) { // Adds the premium to the premiums list
   premiumList.innerHTML += `
     <li class="item">
       <p>${premium.carrier}</p>
@@ -77,7 +91,7 @@ function updatePremiumList() {
   });
 }
 
-function addTableRows(data) {
+function addTableRows() {  //on the edit db page
 
   table.innerHTML = `
     <tr>
@@ -89,7 +103,7 @@ function addTableRows(data) {
       <th>Carrier</th>
     </tr>`;
 
-  for (const [stateName, object] of Object.entries(data)) {
+  for (const [stateName, object] of Object.entries(db)) {
     for (const [planType, array] of Object.entries(object)) {
       array.map((premium) => {
         table.innerHTML += `
@@ -106,6 +120,37 @@ function addTableRows(data) {
       })
     }
   }
+}
+
+function newPremiumValidation() {
+  if(!newState.value) {
+    newState.classList.add('error');
+  } else if(!(newAPlan.checked || newBPlan.checked || newCPlan.checked)) {
+    newState.classList.remove('error');
+    newPlanContainer.classList.add('error');
+  } else if (!minAge.value || parseInt(minAge.value) < 18) {
+    newPlanContainer.classList.remove('error');
+    minAge.classList.add('error');
+  } else if (!maxAge.value || parseInt(maxAge.value) < parseInt(minAge.value)) {
+    minAge.classList.remove('error');
+    maxAge.classList.add('error');
+  } else if (!newPremium.value) {
+    maxAge.classList.remove('error');
+    newPremium.classList.add('error');
+  } else if (!newCarrier.value) {
+    newPremium.classList.remove('error');
+    newCarrier.classList.add('error');
+  } else {
+    newCarrier.classList.remove('error');
+    return true
+  }
+  return false
+}
+
+function premiumToDB(itemPlan) {
+  const item = [parseInt(newMonth.value), parseInt(minAge.value),parseInt(maxAge.value),parseInt(newPremium.value),newCarrier.value];
+  const itemState = newState.value === 'ANY' ? '0' : `${newState.value.split(' ').join('')}`
+  db[itemState][`${itemPlan}`].push(item);
 }
 
 // API interactions
@@ -141,9 +186,24 @@ function getFullDatabase() {
     })
       .then((response) => response.json())
       .then((data) => {
-        addTableRows(data);
+        db = data;
+        addTableRows();
         backBtn.disabled = false;
+        console.log(data)
       })
+}
+
+function uploadNewData(ModifiedData){
+  fetch(api,
+    { method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(ModifiedData)
+    })
+      .then((response) => response.json())
+      .then((data) => {console.log(data)})
 }
 
 // Event listeners
@@ -175,11 +235,51 @@ updaterBtn.addEventListener('click', () => {
   getFullDatabase();
   calculator.classList.add('hidden');
   updater.classList.remove('hidden');
+
+  newMonth.innerHTML = `<option value="0">ANY</option>`;
+  for(let i = 0; i < 12; i++) {
+    newMonth.innerHTML += `<option value="${i + 1}">${MonthNameOrNumber(i + 1)}</option>`;
+  }
+});
+
+newPremiumBtn.addEventListener('click', () => {
+  if(newPremiumValidation()) {
+    newAPlan.checked && premiumToDB('A');
+    newBPlan.checked && premiumToDB('B');
+    newCPlan.checked && premiumToDB('C');
+    addTableRows();
+  }
 });
 
 backBtn.addEventListener('click', () => {
   calculator.classList.remove('hidden');
   updater.classList.add('hidden');
+});
+
+saveBtn.addEventListener('click', () => {
+  const newDB = {};
+  const dbArray = Array.from(document.querySelectorAll('td'));
+  for(let i = 0; i < dbArray.length; i++){
+    if((i + 1) % 7 === 0){
+      const newDBState = `${(dbArray[i - 6].childNodes[0].nodeValue) !== 'ANY' ? `${dbArray[i - 6].childNodes[0].nodeValue}`.split(' ').join('') : '0'}`;
+      if(newDB[`${newDBState}`] === undefined){
+        newDB[`${newDBState}`] = {'A': [], 'B':[], 'C':[]};
+      }
+
+      const dbPremium = []
+      for(let inversePosition = 5; inversePosition > 0; inversePosition--){
+        if (dbPremium.length <= 0){
+          if(`${dbArray[i - inversePosition + 1].childNodes[0].nodeValue}` === 'ANY'){
+            dbPremium.push(0)
+          } else dbPremium.push(MonthNameOrNumber(dbArray[i - inversePosition + 1].childNodes[0].nodeValue));
+        }else dbPremium.push(dbArray[i - inversePosition + 1].childNodes[0].nodeValue);
+      }
+
+      newDB[`${newDBState}`][`${dbArray[i - 5].childNodes[0].nodeValue}`].push(dbPremium);
+    }
+  }
+  console.log(newDB)
+  uploadNewData(newDB)
 });
 
 document.addEventListener('DOMContentLoaded', () => {

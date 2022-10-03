@@ -71,21 +71,41 @@
 
   <div class="updater hidden">
     <div class="updater-actions">
-      <button id="back" type="button" disabled> &lt; Back to calculator</button>
-      <button id="save" type="button"> Save </button>
+      <div class="updater-buttons">
+        <button id="back" type="button" disabled> &lt; Back to calculator</button>
+        <button id="save" type="button"> Save </button>
+      </div>
+      <form class="newItem">
+        <input list="newStateData" id="newState" name="newState" placeholder="State">
+        <datalist id="newStateData">
+          <option value="ANY">
+        </datalist>
+        <div class="plans">
+          <input type="checkbox" id="newAPlan" name="newAPlan" value="A">
+          <label for="newAPlan">A</label>
+          <input type="checkbox" id="newBPlan" name="newBPlan" value="B">
+          <label for="newBPlan">B</label>
+          <input type="checkbox" id="newCPlan" name="newCPlan" value="C">
+          <label for="newCPlan">C</label>
+        </div>
+        <label for="newMonth">
+          Month:
+          <select name="newMonth" id="newMonth">
+            <!-- populates on js -->
+          </select>
+        </label>
+        <input type="number" name="minAge" id="minAge" placeholder="Minimum age" min="18">
+        <input type="number" name="maxAge" id="maxAge" placeholder="Maximum age" min="18">
+        <input type="number" name="newPremium" id="newPremium" placeholder="Premium" min="1">
+        <input type="text" name="newCarrier" id="newCarrier" placeholder="Carrier">
+        <input type="button" value="create" id="createPremium">
+      </form>
     </div>
 
-    <table class="data">
-      <tr>
-        <td contenteditable>NY - New York</td>
-        <td contenteditable>A</td>
-        <td contenteditable>September</td>
-        <td contenteditable>21</td>
-        <td contenteditable>45</td>
-        <td contenteditable>Qwerty</td>
-        <td contenteditable>150</td>
-      </tr>
-    </table>
+    <div class="data">
+      <table id="table">
+      </table>
+    </div>
   </div>
 
   <script src="index.js"></script>

@@ -1,4 +1,6 @@
-const data = require("./premiumList.json");
+const fileName = './premiumList.json'
+const data = require(`${fileName}`);
+const fs = require('fs');
 
 const express = require("express");
 const app = express();
@@ -68,6 +70,13 @@ app.get("/api/v1/states/:state&:plan&:date&:age", (req, res) => {
     });
 
   res.send(options);
+});
+
+app.post("/api/v1", (req, res) => {
+  fs.writeFileSync(fileName, JSON.stringify(req.body), function writeJSON(err) {
+    if (err) res.status(403).send('Error prsing data');
+  });
+  res.send('uploaded');
 });
 
 const port = process.env.port || 3000;
