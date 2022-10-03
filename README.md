@@ -36,7 +36,7 @@ To get a local copy up and running follow these simple example steps.
 
 - Navigate to the "back-end" folder on your console and run `node premiums.js`
 
-- Navigate to the "front-end" folder and open the "index.html" file (You can also do it via VSCoda's "live server" option)
+- Navigate to the "front-end" folder and open the "index.html" file (You can also do it via VSCode's "live server" option)
 
 ## Author: 👋
 
