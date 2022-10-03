@@ -189,7 +189,6 @@ function getFullDatabase() {
         db = data;
         addTableRows();
         backBtn.disabled = false;
-        console.log(data)
       })
 }
 
@@ -240,6 +239,8 @@ updaterBtn.addEventListener('click', () => {
   for(let i = 0; i < 12; i++) {
     newMonth.innerHTML += `<option value="${i + 1}">${MonthNameOrNumber(i + 1)}</option>`;
   }
+
+  alert('All text from the database is editable, you just need to click it and press save when you finish')
 });
 
 newPremiumBtn.addEventListener('click', () => {
@@ -256,7 +257,8 @@ backBtn.addEventListener('click', () => {
   updater.classList.add('hidden');
 });
 
-saveBtn.addEventListener('click', () => {
+saveBtn.addEventListener('click', (e) => {
+  e.preventDefault();
   const newDB = {};
   const dbArray = Array.from(document.querySelectorAll('td'));
   for(let i = 0; i < dbArray.length; i++){
@@ -278,8 +280,8 @@ saveBtn.addEventListener('click', () => {
       newDB[`${newDBState}`][`${dbArray[i - 5].childNodes[0].nodeValue}`].push(dbPremium);
     }
   }
-  console.log(newDB)
   uploadNewData(newDB)
+  alert('saved succesfully');
 });
 
 document.addEventListener('DOMContentLoaded', () => {
