@@ -1,6 +1,6 @@
-# Premium Calculator
+# Premium Calculator :abacus:
 
-This is a single page aplication (SPA) that lets you make use of an API to request relevant data from a set of parameters and displays it on screen to calculate values from the selected period (Monthly, Quarterly, Semi-Annually, Annually), or modify the database on-demand.
+This is a single page aplication (SPA) that lets you make use of an API to request relevant data from a set of parameters and displays it on screen to calculate values from the selected period (Monthly, Quarterly, Semi-Annually, Annually), or modify the JSON database on-demand.
 
 ## Built With: :mag:
 
